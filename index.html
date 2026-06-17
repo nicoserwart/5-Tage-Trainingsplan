@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Iron Cycle Logbook</title>
+  <meta name="description" content="5-Tage Bodybuilding Trainingslogbuch mit Zyklen, Deload und Progression." />
+  <meta name="theme-color" content="#0b0f19" />
+  <style>
+    :root {
+      --bg: #080b12;
+      --bg2: #0d1322;
+      --card: rgba(255,255,255,.075);
+      --card2: rgba(255,255,255,.105);
+      --line: rgba(255,255,255,.13);
+      --text: #f4f7fb;
+      --muted: #9ca9bd;
+      --muted2: #6d7890;
+      --accent: #7c5cff;
+      --accent2: #00d4ff;
+      --good: #2ef2a7;
+      --warn: #ffd166;
+      --danger: #ff4d6d;
+      --shadow: 0 22px 70px rgba(0,0,0,.45);
+      --radius: 22px;
+      --radius2: 14px;
+      --safe: env(safe-area-inset-bottom);
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      font-family: var(--font);
+      background:
+        radial-gradient(circle at 15% -10%, rgba(124,92,255,.45), transparent 32%),
+        radial-gradient(circle at 85% 5%, rgba(0,212,255,.28), transparent 28%),
+        radial-gradient(circle at 70% 100%, rgba(46,242,167,.10), transparent 26%),
+        linear-gradient(180deg, #080b12 0%, #0b1020 42%, #070a11 100%);
+      color: var(--text);
+      overflow-x: hidden;
+      padding-bottom: calc(92px + var(--safe));
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.8), transparent 70%);
+      z-index: -1;
+    }
+
+    .app {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 18px 14px 0;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      margin: -18px -14px 12px;
+      padding: 14px 14px 12px;
+      background: linear-gradient(180deg, rgba(8,11,18,.96), rgba(8,11,18,.72));
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: min(1120px, 100%);
+      margin: 0 auto;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(135deg, rgba(124,92,255,1), rgba(0,212,255,.88));
+      box-shadow: 0 12px 30px rgba(124,92,255,.34);
+      font-size: 22px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: -.03em;
+      line-height: 1.05;
+      white-space: nowrap;
+    }
+
+    .brand p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 260px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.075);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 8px 11px;
+      font-size: 12px;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.045)),
+        radial-gradient(circle at 10% 0%, rgba(124,92,255,.45), transparent 36%),
+        radial-gradient(circle at 92% 24%, rgba(0,212,255,.26), transparent 36%);
+      box-shadow: var(--shadow);
+      border-radius: 30px;
+      padding: 22px;
+      margin-bottom: 14px;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -80px;
+      bottom: -100px;
+      width: 260px;
+      height: 260px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(46,242,167,.18), transparent 66%);
+      filter: blur(5px);
+    }
+
+    .hero h2 {
+      margin: 0;
+      font-size: clamp(28px, 7vw, 54px);
+      letter-spacing: -.07em;
+      line-height: .95;
+    }
+
+    .hero .sub {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      max-width: 760px;
+      line-height: 1.5;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    button, select, input, textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .btn {
+      border-radius: 16px;
+      padding: 12px 14px;
+      color: var(--text);
+      background: rgba(255,255,255,.095);
+      border: 1px solid var(--line);
+      font-weight: 800;
+      box-shadow: 0 8px 24px rgba(0,0,0,.22);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: 0;
+      color: white;
+    }
+
+    .btn.good {
+      background: linear-gradient(135deg, rgba(46,242,167,.95), rgba(0,212,255,.85));
+      color: #051015;
+      border: 0;
+    }
+
+    .btn.danger {
+      background: rgba(255,77,109,.16);
+      border-color: rgba(255,77,109,.33);
+      color: #ffd8df;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.105), rgba(255,255,255,.055));
+      backdrop-filter: blur(18px);
+      border-radius: var(--radius);
+      box-shadow: 0 18px 50px rgba(0,0,0,.25);
+      overflow: hidden;
+    }
+
+    .card.pad { padding: 16px; }
+
+    .span-4 { grid-column: span 4; }
+    .span-8 { grid-column: span 8; }
+    .span-12 { grid-column: span 12; }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .section-title h3 {
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: -.025em;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(0,0,0,.16);
+      padding: 12px;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 20px;
+      letter-spacing: -.05em;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    .phase-wrap {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .phase {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 10px;
+      background: rgba(0,0,0,.13);
+      min-height: 86px;
+    }
+
+    .phase.active {
+      border-color: rgba(0,212,255,.55);
+      background: linear-gradient(180deg, rgba(0,212,255,.18), rgba(124,92,255,.10));
+      box-shadow: 0 0 0 1px rgba(0,212,255,.13) inset;
+    }
+
+    .phase b {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .phase span {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.35;
+      display: block;
+    }
+
+    .week-selector {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 0 2px;
+      scrollbar-width: none;
+    }
+
+    .week-selector::-webkit-scrollbar { display: none; }
+
+    .week-pill {
+      flex: 0 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 9px 12px;
+      color: var(--muted);
+      background: rgba(255,255,255,.06);
+      font-weight: 800;
+      font-size: 12px;
+    }
+
+    .week-pill.active {
+      color: white;
+      border-color: rgba(124,92,255,.75);
+      background: linear-gradient(135deg, rgba(124,92,255,.76), rgba(0,212,255,.46));
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 0 8px;
+      scrollbar-width: none;
+    }
+
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tab {
+      flex: 0 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 10px 12px;
+      color: var(--muted);
+      background: rgba(255,255,255,.06);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .tab.active {
+      color: #071016;
+      background: linear-gradient(135deg, var(--good), var(--accent2));
+      border: 0;
+    }
+
+    .day-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(90deg, rgba(124,92,255,.14), rgba(0,212,255,.08));
+    }
+
+    .day-head h3 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: -.04em;
+    }
+
+    .day-head p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .exercise-list {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+    }
+
+    .exercise {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(0,0,0,.18);
+      overflow: hidden;
+    }
+
+    .ex-top {
+      padding: 13px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .ex-name {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .badge {
+      width: 30px;
+      height: 30px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.09);
+      border: 1px solid var(--line);
+      font-size: 15px;
+      flex: 0 0 auto;
+    }
+
+    .ex-name b {
+      display: block;
+      font-size: 14px;
+      letter-spacing: -.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ex-name span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    .target {
+      text-align: right;
+      color: var(--good);
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .set-grid {
+      display: grid;
+      gap: 8px;
+      padding: 0 13px 13px;
+    }
+
+    .set-row {
+      display: grid;
+      grid-template-columns: 34px 1fr 1fr 36px;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .set-row .setnum {
+      color: var(--muted);
+      font-weight: 900;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    input, textarea, select {
+      color: var(--text);
+      background: rgba(255,255,255,.075);
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      padding: 11px 10px;
+      outline: none;
+      min-width: 0;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: rgba(0,212,255,.55);
+      box-shadow: 0 0 0 3px rgba(0,212,255,.12);
+    }
+
+    .done {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.075);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-weight: 1000;
+    }
+
+    .done.on {
+      background: linear-gradient(135deg, var(--good), var(--accent2));
+      color: #041014;
+      border: 0;
+    }
+
+    .note {
+      margin: 0 13px 13px;
+      width: calc(100% - 26px);
+      resize: vertical;
+      min-height: 42px;
+      font-size: 12px;
+    }
+
+    .hint {
+      border: 1px solid rgba(255,209,102,.25);
+      color: #ffe8a6;
+      background: rgba(255,209,102,.09);
+      border-radius: 16px;
+      padding: 11px;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .history-list {
+      display: grid;
+      gap: 8px;
+      max-height: 360px;
+      overflow: auto;
+      padding-right: 3px;
+    }
+
+    .history-item {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 11px;
+      background: rgba(0,0,0,.16);
+    }
+
+    .history-item b {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 3px;
+    }
+
+    .history-item span {
+      color: var(--muted);
+      font-size: 11px;
+      display: block;
+      line-height: 1.35;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: calc(12px + var(--safe));
+      z-index: 50;
+      width: min(680px, calc(100% - 22px));
+      border: 1px solid var(--line);
+      background: rgba(9,13,24,.82);
+      backdrop-filter: blur(22px);
+      border-radius: 26px;
+      padding: 8px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.44);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .navbtn {
+      border-radius: 18px;
+      padding: 10px 6px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .navbtn.active {
+      background: linear-gradient(135deg, rgba(124,92,255,.85), rgba(0,212,255,.55));
+      color: white;
+    }
+
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    .settings-row {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .settings-row label {
+      display: grid;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(88px + var(--safe));
+      transform: translateX(-50%) translateY(20px);
+      opacity: 0;
+      pointer-events: none;
+      background: rgba(5,10,16,.92);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 11px 14px;
+      color: var(--text);
+      z-index: 80;
+      box-shadow: 0 12px 40px rgba(0,0,0,.35);
+      transition: .25s ease;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .progress {
+      height: 10px;
+      background: rgba(255,255,255,.08);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 12px;
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .progress > div {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--good));
+      border-radius: inherit;
+      transition: width .2s ease;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.68);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      display: none;
+      align-items: end;
+      padding: 12px;
+    }
+
+    .modal.show { display: flex; }
+
+    .modal-card {
+      width: min(720px, 100%);
+      margin: 0 auto;
+      border-radius: 26px;
+      background: #0c1220;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      max-height: 86dvh;
+      overflow: auto;
+    }
+
+    .modal-card h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      letter-spacing: -.04em;
+    }
+
+    .modal-card p, .modal-card li {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .modal-card ul { padding-left: 18px; }
+
+    @media (max-width: 840px) {
+      .grid { grid-template-columns: 1fr; }
+      .span-4, .span-8, .span-12 { grid-column: 1; }
+      .phase-wrap { grid-template-columns: repeat(2, 1fr); }
+      .metric-row { grid-template-columns: 1fr 1fr 1fr; }
+      .brand p { max-width: 170px; }
+      .hero { padding: 19px; border-radius: 26px; }
+    }
+
+    @media (max-width: 420px) {
+      .set-row { grid-template-columns: 30px 1fr 1fr 34px; gap: 6px; }
+      input { padding: 10px 8px; }
+      .metric-row { gap: 7px; }
+      .metric { padding: 10px 8px; }
+      .metric strong { font-size: 17px; }
+      .chip { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">
+        <div class="mark">🏋️</div>
+        <div>
+          <h1>Iron Cycle Logbook</h1>
+          <p>5‑Day Hypertrophy Split · Mobile App</p>
+        </div>
+      </div>
+      <div class="chip" id="todayChip">Heute</div>
+    </div>
+  </div>
+
+  <main class="app">
+    <section id="screenHome" class="screen active">
+      <div class="hero">
+        <h2>Train hard.<br>Log smart.</h2>
+        <p class="sub">
+          Dein 5‑Tage Bodybuilding-Plan mit Quad Day, Hamstring Day, Push, Pull und Upper.
+          Integrierte 12‑Wochen-Periodisierung: Intro, Hypertrophy, Strength und Deload.
+        </p>
+        <div class="hero-actions">
+          <button class="btn primary" onclick="go('training')">Training starten</button>
+          <button class="btn" onclick="go('cycle')">Zyklus ansehen</button>
+          <button class="btn" onclick="openInfo()">Begriffe erklärt</button>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card pad span-4">
+          <div class="section-title">
+            <h3>Aktuelle Woche</h3>
+            <span class="small" id="phaseMini">–</span>
+          </div>
+          <div class="metric-row">
+            <div class="metric"><strong id="weekMetric">1</strong><span>Woche</span></div>
+            <div class="metric"><strong id="rirMetric">3</strong><span>RIR</span></div>
+            <div class="metric"><strong id="repMetric">12–15</strong><span>Reps</span></div>
+          </div>
+          <div class="progress"><div id="weekProgress"></div></div>
+          <p class="small" style="margin-top:12px;">
+            RIR = „Reps in Reserve“, also Wiederholungen im Tank. 2 RIR bedeutet:
+            Du könntest noch etwa 2 saubere Wiederholungen schaffen.
+          </p>
+        </div>
+
+        <div class="card pad span-8">
+          <div class="section-title">
+            <h3>Heute trainieren</h3>
+            <span class="small" id="todayFocus">–</span>
+          </div>
+          <div id="todayCard"></div>
+        </div>
+
+        <div class="card pad span-12">
+          <div class="section-title">
+            <h3>Wochenplan</h3>
+            <span class="small">2× Beine · 3× Oberkörper</span>
+          </div>
+          <div class="tabs" id="homeDayTabs"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screenTraining" class="screen">
+      <div class="card">
+        <div class="day-head">
+          <div>
+            <h3 id="dayTitle">Training</h3>
+            <p id="daySubtitle">Wähle einen Trainingstag.</p>
+          </div>
+          <button class="btn good" onclick="finishWorkout()">Workout speichern</button>
+        </div>
+        <div class="tabs" id="dayTabs" style="padding:12px 12px 4px;"></div>
+        <div class="exercise-list" id="exerciseList"></div>
+      </div>
+    </section>
+
+    <section id="screenCycle" class="screen">
+      <div class="grid">
+        <div class="card pad span-12">
+          <div class="section-title">
+            <h3>12‑Wochen Zyklus</h3>
+            <span class="small">Intro → Hypertrophy → Strength → Deload</span>
+          </div>
+          <div class="week-selector" id="weekSelector"></div>
+        </div>
+
+        <div class="card pad span-8">
+          <div class="section-title">
+            <h3>Periodisierung</h3>
+            <span class="small">Bodybuilding‑logisch geplant</span>
+          </div>
+          <div class="phase-wrap" id="phaseWrap"></div>
+        </div>
+
+        <div class="card pad span-4">
+          <div class="section-title">
+            <h3>Progressionsregel</h3>
+          </div>
+          <div class="hint">
+            Wenn du in allen Sätzen das obere Ende der Ziel-Reps erreichst und noch im Ziel-RIR bleibst,
+            erhöhe beim nächsten Mal das Gewicht leicht. Bei Maschinen meist +2,5–5 kg, bei Kurzhanteln +1–2 kg.
+          </div>
+        </div>
+
+        <div class="card pad span-12">
+          <div class="section-title">
+            <h3>Dein Wochenziel</h3>
+            <span class="small" id="cycleGoalMini">–</span>
+          </div>
+          <p class="small" id="cycleExplanation"></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="screenHistory" class="screen">
+      <div class="grid">
+        <div class="card pad span-8">
+          <div class="section-title">
+            <h3>Workout-Historie</h3>
+            <button class="btn danger" onclick="clearHistory()">Historie löschen</button>
+          </div>
+          <div class="history-list" id="historyList"></div>
+        </div>
+        <div class="card pad span-4">
+          <div class="section-title">
+            <h3>Einstellungen</h3>
+          </div>
+          <div class="settings-row">
+            <label>
+              Zykluswoche
+              <select id="weekSelect" onchange="setWeek(Number(this.value))"></select>
+            </label>
+            <label>
+              Aktiver Trainingstag
+              <select id="daySelect" onchange="setDay(Number(this.value))"></select>
+            </label>
+            <button class="btn" onclick="exportData()">Daten exportieren</button>
+            <button class="btn" onclick="document.getElementById('importFile').click()">Daten importieren</button>
+            <input id="importFile" type="file" accept="application/json" style="display:none" onchange="importData(event)" />
+            <button class="btn danger" onclick="resetAll()">Alles zurücksetzen</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <button class="navbtn active" id="navHome" onclick="go('home')">Home</button>
+    <button class="navbtn" id="navTraining" onclick="go('training')">Log</button>
+    <button class="navbtn" id="navCycle" onclick="go('cycle')">Zyklus</button>
+    <button class="navbtn" id="navHistory" onclick="go('history')">Historie</button>
+  </nav>
+
+  <div class="toast" id="toast">Gespeichert</div>
+
+  <div class="modal" id="infoModal" onclick="if(event.target.id==='infoModal') closeInfo()">
+    <div class="modal-card">
+      <h3>Begriffe kurz erklärt</h3>
+      <ul>
+        <li><b>Hypertrophie</b>: Muskelaufbau durch Spannung, Volumen und progressive Überladung.</li>
+        <li><b>Progressive Überladung</b>: Du machst über Zeit etwas mehr — mehr Gewicht, mehr Wiederholungen oder bessere Technik.</li>
+        <li><b>RIR</b>: „Reps in Reserve“, also wie viele Wiederholungen du noch im Tank hast.</li>
+        <li><b>Deload</b>: Leichtere Woche, damit Gelenke, Nervensystem und Muskeln sich erholen.</li>
+        <li><b>Quad-focused</b>: Fokus auf vordere Oberschenkel.</li>
+        <li><b>Hamstring-focused</b>: Fokus auf hintere Oberschenkel.</li>
+        <li><b>High feet</b>: Füße höher auf Hack Squat/Smith; mehr Glutes und Hamstrings.</li>
+        <li><b>Low feet</b>: Füße tiefer; mehr Kniebeugung und mehr Quad-Fokus.</li>
+      </ul>
+      <button class="btn primary" onclick="closeInfo()">Alles klar</button>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "ironCycleLogbook.v1";
+
+    const phases = [
+      {
+        name: "Intro",
+        weeks: [1, 2],
+        reps: "12–15",
+        rir: "3–4",
+        load: "leicht-moderat",
+        text: "Technik sauber einüben, Bewegungen standardisieren und nicht direkt ans Limit gehen. Ziel: Gelenke vorbereiten und Ausgangswerte finden."
+      },
+      {
+        name: "Hypertrophy",
+        weeks: [3, 4, 5, 6],
+        reps: "8–12",
+        rir: "1–2",
+        load: "moderat-schwer",
+        text: "Hauptphase für Muskelaufbau. Du trainierst nah am Muskelversagen, sammelst hochwertiges Volumen und steigerst Gewicht oder Reps."
+      },
+      {
+        name: "Strength",
+        weeks: [7, 8, 9, 10],
+        reps: "5–8",
+        rir: "1–2",
+        load: "schwer",
+        text: "Schwerere Wochen für Kraftaufbau in den Grundübungen. Isolationsübungen bleiben eher im höheren Wiederholungsbereich."
+      },
+      {
+        name: "Deload",
+        weeks: [11],
+        reps: "10–12",
+        rir: "4–5",
+        load: "reduziert",
+        text: "Volumen um ca. 40–50 % reduzieren, keine Sätze bis ans Limit. Ziel: Ermüdung abbauen und nächste Runde vorbereiten."
+      },
+      {
+        name: "Test & Reset",
+        weeks: [12],
+        reps: "6–10",
+        rir: "1–2",
+        load: "kontrolliert schwer",
+        text: "Teste saubere Top-Sets, aber ohne Ego-Lifting. Danach startest du den nächsten Zyklus mit leicht höheren Ausgangsgewichten."
+      }
+    ];
+
+    const split = [
+      {
+        key: "mon",
+        label: "Mo",
+        title: "Hamstring-focused Leg Day",
+        focus: "Hamstrings · Glutes · Waden",
+        emoji: "🦵",
+        exercises: [
+          { name: "Smith Machine Calf Raises", sets: 4, base: "10–12", note: "Als Startübung an der Multipresse. Volle Dehnung unten, harte Kontraktion oben.", icon: "🐮" },
+          { name: "Seated Hamstring Curl", sets: 3, base: "8", note: "Kontrolliert, 1 Sekunde in der Kontraktion halten.", icon: "🦵" },
+          { name: "Smith / Hack Squat (high feet)", sets: 3, base: "6–10", note: "High feet = mehr Glutes/Hamstrings, weniger Quad-dominant.", icon: "🏋️" },
+          { name: "Stiff-Leg Deadlift (Pit Shark)", sets: 3, base: "8–12", note: "Hüfte nach hinten, Rücken neutral, Dehnung in den Hamstrings suchen.", icon: "⛓️" },
+          { name: "Bulgarian Split Squat", sets: 2, base: "8–12", note: "Leicht nach vorne lehnen für mehr Glute-Fokus.", icon: "⚔️" },
+          { name: "Hip Abductor", sets: 3, base: "12–15", note: "Glute medius; kontrolliert, nicht schwingen.", icon: "🍑" },
+          { name: "Lying / Single-Leg Curl", sets: 3, base: "12–15", note: "Einseitig für Symmetrie, langsam exzentrisch.", icon: "🎯" },
+          { name: "Eugene Forearm Extension", sets: 2, base: "12–20", note: "Unterarmstrecker. Kontrolliert strecken, Handgelenk sauber führen.", icon: "🤲" },
+          { name: "Eugene Forearm Curls", sets: 2, base: "12–20", note: "Unterarmbeuger. Volle Handgelenksbeugung, kein Schwung.", icon: "✊" }
+        ]
+      },
+      {
+        key: "tue",
+        label: "Di",
+        title: "Chest-focused Push Day",
+        focus: "Brust · Schulter · Trizeps",
+        emoji: "💥",
+        exercises: [
+          { name: "Incline Smith Machine Press", sets: 3, base: "6–12", note: "Oberer Brustfokus. Schulterblätter hinten/unten.", icon: "↗️" },
+          { name: "Dumbbell or Machine Incline Press", sets: 3, base: "8–12", note: "Zweite Schrägbank-Variante für mehr Brustvolumen.", icon: "📐" },
+          { name: "Flat Press", sets: 3, base: "6–10", note: "Mittlere Brust; kontrolliert drücken.", icon: "🧱" },
+          { name: "Standing Dumbbell Lateral Raises", sets: 4, base: "10–15", note: "Seitliche Schulter. Ellenbogen führt die Bewegung.", icon: "🪽" },
+          { name: "Machine Triceps Extension / Weighted Dips", sets: 3, base: "8–12", note: "Schwere Trizepsübung.", icon: "🔱" },
+          { name: "Cable Triceps Extension", sets: 3, base: "8–12", note: "Saubere Streckung, Oberarme stabil.", icon: "🎚️" },
+          { name: "Pec Deck", sets: 2, base: "8–12", note: "Brust isolieren, Stretch kontrollieren.", icon: "🦅" },
+          { name: "Cable Crossover", sets: 2, base: "10–15", note: "Finisher mit konstanter Kabelspannung.", icon: "✖️" }
+        ]
+      },
+      {
+        key: "wed",
+        label: "Mi",
+        title: "Back and Biceps Pull Day",
+        focus: "Rücken · Bizeps",
+        emoji: "🧲",
+        exercises: [
+          { name: "Cable Lat Pulldown", sets: 3, base: "8–12", note: "Lat = breiter Rückenmuskel. Ellenbogen Richtung Hüfte ziehen.", icon: "⬇️" },
+          { name: "Chest-Supported Row Machine", sets: 3, base: "6–10", note: "Brustpolster verhindert Schwung; Fokus auf Rücken-Dicke.", icon: "🚣" },
+          { name: "Seated Hammer Curl Variation", sets: 3, base: "8–12", note: "Neutralgriff trifft Brachialis und Bizeps.", icon: "🔨" },
+          { name: "Single-Arm Cable Row", sets: 3, base: "8–12", note: "Einseitig für bessere Verbindung zum Lat.", icon: "🪝" },
+          { name: "Standing Straight-Arm Pulldown", sets: 3, base: "10–15", note: "Lat-Isolation ohne viel Bizeps.", icon: "📉" },
+          { name: "Bayesian Curl", sets: 3, base: "10–15", note: "Kabelcurl mit Arm hinter dem Körper; starker Stretch.", icon: "🧬" },
+          { name: "Incline Dumbbell Curl", sets: 3, base: "8–12", note: "Bizeps in gedehnter Position.", icon: "💪" },
+          { name: "Eugene Forearm Extension", sets: 2, base: "12–20", note: "Unterarmstrecker. Kontrolliert strecken, Handgelenk sauber führen.", icon: "🤲" },
+          { name: "Eugene Forearm Curls", sets: 2, base: "12–20", note: "Unterarmbeuger. Volle Handgelenksbeugung, kein Schwung.", icon: "✊" }
+        ]
+      },
+      {
+        key: "thu",
+        label: "Do",
+        title: "Rest Day",
+        focus: "Recovery · Schritte · Schlaf",
+        emoji: "🛌",
+        exercises: []
+      },
+      {
+        key: "fri",
+        label: "Fr",
+        title: "Quad-focused Leg Day",
+        focus: "Quads · Adduktoren · Waden",
+        emoji: "⚡",
+        exercises: [
+          { name: "Seated Leg Curl", sets: 3, base: "8–12", note: "Hamstrings aufwärmen und Knie vorbereiten.", icon: "🦵" },
+          { name: "Smith / Hack Squat (low feet)", sets: 3, base: "6–10", note: "Low feet = mehr Kniebeugung, stärkerer Quad-Fokus.", icon: "🏋️" },
+          { name: "Leg Extension", sets: 3, base: "8–12", note: "Quad-Isolation. Oben hart kontrahieren.", icon: "🚀" },
+          { name: "Hip Adduction", sets: 3, base: "10–12", note: "Adduktoren = innere Oberschenkel.", icon: "🧲" },
+          { name: "Calf Raises", sets: 3, base: "10–12", note: "Volle Dehnung unten, Pause oben.", icon: "🐮" }
+        ]
+      },
+      {
+        key: "sat",
+        label: "Sa",
+        title: "Full Upper Body Day",
+        focus: "Brust · Rücken · Schultern · Arme",
+        emoji: "🦍",
+        exercises: [
+          { name: "Incline Chest Press", sets: 3, base: "6–10", note: "Schwerer Start für obere Brust.", icon: "↗️" },
+          { name: "Flat Press", sets: 2, base: "6–10", note: "Ergänzendes Brustvolumen.", icon: "🧱" },
+          { name: "Lat Pulldown", sets: 3, base: "8–12", note: "Rückenbreite.", icon: "⬇️" },
+          { name: "Single-Arm Cable Row", sets: 3, base: "8–12", note: "Lat und mittlerer Rücken.", icon: "🪝" },
+          { name: "Lateral Raises", sets: 4, base: "12–15", note: "Seitliche Schulter für Breite.", icon: "🪽" },
+          { name: "Biceps Curl Variation", sets: 4, base: "8–12", note: "Curl-Variante frei wählbar.", icon: "💪" },
+          { name: "Triceps Extension Variation", sets: 4, base: "8–12", note: "Extension statt Curl: Trizeps streckt den Arm.", icon: "🔱" },
+          { name: "Overhead Shoulder Press Variation", sets: 3, base: "6–10", note: "Every other week: also jede zweite Woche.", icon: "⬆️", alternate: true },
+          { name: "Direct Rear Delt Work", sets: 3, base: "12–20", note: "Hintere Schulter, z. B. Reverse Pec Deck oder Cable Fly.", icon: "🎯" }
+        ]
+      },
+      {
+        key: "sun",
+        label: "So",
+        title: "Rest Day",
+        focus: "Recovery · Meal Prep",
+        emoji: "🥘",
+        exercises: []
+      }
+    ];
+
+    const defaultState = {
+      week: 1,
+      day: getDefaultDayIndex(),
+      logs: [],
+      current: {}
+    };
+
+    let state = loadState();
+
+    function loadState() {
+      try {
+        const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        return { ...defaultState, ...stored };
+      } catch {
+        return { ...defaultState };
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function getDefaultDayIndex() {
+      const jsDay = new Date().getDay(); // Sun 0
+      const map = {1:0, 2:1, 3:2, 4:3, 5:4, 6:5, 0:6};
+      return map[jsDay] ?? 0;
+    }
+
+    function getPhase(week = state.week) {
+      return phases.find(p => p.weeks.includes(week)) || phases[0];
+    }
+
+    function getTargetReps(ex) {
+      const phase = getPhase();
+      if (phase.name === "Intro") return widenHigh(ex.base);
+      if (phase.name === "Hypertrophy") return ex.base;
+      if (phase.name === "Strength") {
+        if (ex.base.includes("6–10") || ex.base.includes("6-10") || ex.base.includes("6–12") || ex.base.includes("6-12")) return "5–8";
+        if (ex.base === "8") return "6–8";
+        return ex.base.includes("12") || ex.base.includes("15") || ex.base.includes("20") ? ex.base : "6–8";
+      }
+      if (phase.name === "Deload") return "10–12";
+      return ex.base;
+    }
+
+    function widenHigh(base) {
+      if (base === "8") return "10–12";
+      if (base.includes("6")) return "10–12";
+      if (base.includes("8–12") || base.includes("8-12")) return "12–15";
+      return base;
+    }
+
+    function adjustedSets(ex) {
+      const phase = getPhase();
+      if (phase.name === "Deload") return Math.max(1, Math.ceil(ex.sets * 0.55));
+      if (phase.name === "Intro") return Math.max(2, Math.min(ex.sets, ex.sets - (ex.sets >= 4 ? 1 : 0)));
+      return ex.sets;
+    }
+
+    function dayKey(dayIndex = state.day) {
+      return split[dayIndex].key;
+    }
+
+    function inputKey(dayIndex, exIndex, setIndex, field) {
+      return `w${state.week}.${split[dayIndex].key}.e${exIndex}.s${setIndex}.${field}`;
+    }
+
+    function noteKey(dayIndex, exIndex) {
+      return `w${state.week}.${split[dayIndex].key}.e${exIndex}.note`;
+    }
+
+    function renderAll() {
+      document.getElementById("todayChip").textContent = new Date().toLocaleDateString("de-DE", { weekday: "short", day: "2-digit", month: "2-digit" });
+      renderHome();
+      renderTraining();
+      renderCycle();
+      renderHistory();
+      renderSettings();
+      updateNav();
+    }
+
+    function renderHome() {
+      const phase = getPhase();
+      const today = split[state.day];
+
+      document.getElementById("phaseMini").textContent = phase.name;
+      document.getElementById("weekMetric").textContent = state.week;
+      document.getElementById("rirMetric").textContent = phase.rir;
+      document.getElementById("repMetric").textContent = phase.reps;
+      document.getElementById("weekProgress").style.width = `${Math.round((state.week / 12) * 100)}%`;
+      document.getElementById("todayFocus").textContent = today.focus;
+
+      const todayCard = document.getElementById("todayCard");
+      if (today.exercises.length === 0) {
+        todayCard.innerHTML = `<div class="hint"><b>${today.emoji} ${today.title}</b><br>Heute ist Recovery angesagt: Schlaf, Schritte, Mobility, Essen vorbereiten.</div>`;
+      } else {
+        todayCard.innerHTML = `
+          <div class="hint">
+            <b>${today.emoji} ${today.title}</b><br>
+            ${today.exercises.length} Übungen · Ziel heute: ${phase.reps} Reps · ${phase.rir} RIR · ${phase.load}
+          </div>
+          <div class="hero-actions" style="margin-top:12px;">
+            <button class="btn primary" onclick="go('training')">Jetzt loggen</button>
+          </div>
+        `;
+      }
+
+      const homeTabs = document.getElementById("homeDayTabs");
+      homeTabs.innerHTML = split.map((d, i) => `
+        <button class="tab ${i === state.day ? "active" : ""}" onclick="setDay(${i}); go('training')">
+          ${d.label} · ${d.emoji} ${d.title.replace(" Day", "")}
+        </button>
+      `).join("");
+    }
+
+    function renderTraining() {
+      const d = split[state.day];
+      const phase = getPhase();
+      document.getElementById("dayTitle").textContent = `${d.emoji} ${d.title}`;
+      document.getElementById("daySubtitle").textContent = `${d.focus} · Woche ${state.week} · ${phase.name} · Ziel: ${phase.reps} Reps · ${phase.rir} RIR`;
+
+      document.getElementById("dayTabs").innerHTML = split.map((day, i) => `
+        <button class="tab ${i === state.day ? "active" : ""}" onclick="setDay(${i})">${day.label}</button>
+      `).join("");
+
+      const list = document.getElementById("exerciseList");
+      if (d.exercises.length === 0) {
+        list.innerHTML = `<div class="hint">Rest Day. Kein Log nötig. Spazieren, gut essen, schlafen, Stress runterfahren.</div>`;
+        return;
+      }
+
+      list.innerHTML = d.exercises.map((ex, exIndex) => {
+        const sets = adjustedSets(ex);
+        const showAlt = ex.alternate ? `<span>Nur jede zweite Woche: ${state.week % 2 === 0 ? "heute drin" : "heute optional/skip"}</span>` : `<span>${ex.note}</span>`;
+        return `
+          <div class="exercise">
+            <div class="ex-top">
+              <div class="ex-name">
+                <div class="badge">${ex.icon}</div>
+                <div>
+                  <b>${ex.name}</b>
+                  ${showAlt}
+                </div>
+              </div>
+              <div class="target">${sets}×${getTargetReps(ex)}</div>
+            </div>
+            <div class="set-grid">
+              ${Array.from({length: sets}, (_, setIndex) => {
+                const wk = inputKey(state.day, exIndex, setIndex, "weight");
+                const rk = inputKey(state.day, exIndex, setIndex, "reps");
+                const dk = inputKey(state.day, exIndex, setIndex, "done");
+                const weight = state.current[wk] || "";
+                const reps = state.current[rk] || "";
+                const done = state.current[dk] || false;
+                return `
+                  <div class="set-row">
+                    <div class="setnum">S${setIndex + 1}</div>
+                    <input inputmode="decimal" placeholder="kg" value="${escapeAttr(weight)}" onchange="setCurrent('${wk}', this.value)" />
+                    <input inputmode="numeric" placeholder="reps" value="${escapeAttr(reps)}" onchange="setCurrent('${rk}', this.value)" />
+                    <button class="done ${done ? "on" : ""}" onclick="toggleDone('${dk}', this)">✓</button>
+                  </div>
+                `;
+              }).join("")}
+            </div>
+            <textarea class="note" placeholder="Notiz: Technik, Schmerz, Maschine, Griff ..." onchange="setCurrent('${noteKey(state.day, exIndex)}', this.value)">${escapeText(state.current[noteKey(state.day, exIndex)] || "")}</textarea>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderCycle() {
+      const phase = getPhase();
+      document.getElementById("weekSelector").innerHTML = Array.from({length: 12}, (_, i) => {
+        const w = i + 1;
+        return `<button class="week-pill ${w === state.week ? "active" : ""}" onclick="setWeek(${w})">W${w}</button>`;
+      }).join("");
+
+      document.getElementById("phaseWrap").innerHTML = phases.map(p => `
+        <div class="phase ${p.name === phase.name ? "active" : ""}">
+          <b>${p.name}</b>
+          <span>Woche ${p.weeks.join(", ")}<br>${p.reps} Reps · ${p.rir} RIR<br>${p.load}</span>
+        </div>
+      `).join("");
+
+      document.getElementById("cycleGoalMini").textContent = `Woche ${state.week}: ${phase.name}`;
+      document.getElementById("cycleExplanation").textContent = phase.text;
+    }
+
+    function renderHistory() {
+      const list = document.getElementById("historyList");
+      if (!state.logs.length) {
+        list.innerHTML = `<div class="hint">Noch keine Workouts gespeichert. Logge dein erstes Training und speichere es danach.</div>`;
+        return;
+      }
+
+      list.innerHTML = [...state.logs].reverse().map(log => `
+        <div class="history-item">
+          <b>${log.dayTitle} · Woche ${log.week} · ${log.phase}</b>
+          <span>${new Date(log.date).toLocaleString("de-DE")}</span>
+          <span>${log.completedSets}/${log.totalSets} Sätze abgehakt · ${log.volume || 0} kg Gesamtvolumen</span>
+        </div>
+      `).join("");
+    }
+
+    function renderSettings() {
+      const weekSelect = document.getElementById("weekSelect");
+      weekSelect.innerHTML = Array.from({length: 12}, (_, i) => `<option value="${i+1}" ${state.week === i+1 ? "selected" : ""}>Woche ${i+1}</option>`).join("");
+      const daySelect = document.getElementById("daySelect");
+      daySelect.innerHTML = split.map((d, i) => `<option value="${i}" ${state.day === i ? "selected" : ""}>${d.label} · ${d.title}</option>`).join("");
+    }
+
+    function setCurrent(key, value) {
+      state.current[key] = value;
+      saveState();
+    }
+
+    function toggleDone(key, btn) {
+      state.current[key] = !state.current[key];
+      btn.classList.toggle("on", state.current[key]);
+      saveState();
+    }
+
+    function setWeek(w) {
+      state.week = Math.min(12, Math.max(1, w));
+      saveState();
+      renderAll();
+      toast(`Woche ${state.week} aktiv`);
+    }
+
+    function setDay(i) {
+      state.day = i;
+      saveState();
+      renderAll();
+    }
+
+    function finishWorkout() {
+      const d = split[state.day];
+      if (!d.exercises.length) {
+        toast("Rest Day gespeichert ist nicht nötig");
+        return;
+      }
+
+      let totalSets = 0, completedSets = 0, volume = 0;
+      d.exercises.forEach((ex, exIndex) => {
+        const sets = adjustedSets(ex);
+        totalSets += sets;
+        for (let setIndex = 0; setIndex < sets; setIndex++) {
+          const dk = inputKey(state.day, exIndex, setIndex, "done");
+          const wk = inputKey(state.day, exIndex, setIndex, "weight");
+          const rk = inputKey(state.day, exIndex, setIndex, "reps");
+          if (state.current[dk]) completedSets++;
+          const weight = Number(String(state.current[wk] || "").replace(",", "."));
+          const reps = Number(state.current[rk] || 0);
+          if (!Number.isNaN(weight) && !Number.isNaN(reps)) volume += Math.round(weight * reps);
+        }
+      });
+
+      state.logs.push({
+        date: new Date().toISOString(),
+        week: state.week,
+        phase: getPhase().name,
+        dayKey: d.key,
+        dayTitle: d.title,
+        completedSets,
+        totalSets,
+        volume
+      });
+
+      saveState();
+      renderAll();
+      toast("Workout gespeichert");
+    }
+
+    function clearHistory() {
+      if (!confirm("Workout-Historie wirklich löschen?")) return;
+      state.logs = [];
+      saveState();
+      renderAll();
+      toast("Historie gelöscht");
+    }
+
+    function resetAll() {
+      if (!confirm("Alles zurücksetzen? Logs und aktuelle Eingaben werden gelöscht.")) return;
+      localStorage.removeItem(STORAGE_KEY);
+      state = { ...defaultState, current: {}, logs: [] };
+      renderAll();
+      toast("Zurückgesetzt");
+    }
+
+    function exportData() {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `iron-cycle-logbook-${new Date().toISOString().slice(0,10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          state = { ...defaultState, ...JSON.parse(reader.result) };
+          saveState();
+          renderAll();
+          toast("Daten importiert");
+        } catch {
+          alert("Import fehlgeschlagen. Datei ist kein gültiges JSON.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function go(screen) {
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.getElementById(`screen${cap(screen)}`).classList.add("active");
+      document.querySelectorAll(".navbtn").forEach(n => n.classList.remove("active"));
+      document.getElementById(`nav${cap(screen)}`).classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function updateNav() {
+      // keep current active screen untouched after rerender
+    }
+
+    function toast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 1800);
+    }
+
+    function openInfo() {
+      document.getElementById("infoModal").classList.add("show");
+    }
+
+    function closeInfo() {
+      document.getElementById("infoModal").classList.remove("show");
+    }
+
+    function cap(s) {
+      return s.charAt(0).toUpperCase() + s.slice(1);
+    }
+
+    function escapeAttr(v) {
+      return String(v).replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+    }
+
+    function escapeText(v) {
+      return String(v).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+    }
+
+    renderAll();
+  </script>
+</body>
+</html>
